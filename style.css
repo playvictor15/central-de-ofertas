@@ -1,111 +1,56 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 body {
-  background-color: #f4f6f8;
-  color: #333;
+  font-family: Arial;
+  background: #f4f6f8;
+  margin: 0;
 }
 
-/* Header */
 .header {
-  background: linear-gradient(135deg, #2f3640, #353b48);
+  background: #2f3640;
   color: #fff;
   text-align: center;
-  padding: 45px 20px;
+  padding: 40px;
 }
 
-.header h1 {
-  font-size: 2.3rem;
-}
-
-.header p {
-  margin-top: 10px;
-  opacity: 0.9;
-}
-
-/* Container */
 .container {
-  max-width: 1100px;
+  max-width: 1000px;
   margin: 40px auto;
-  padding: 0 20px;
-}
-
-/* Sections */
-.section {
-  margin-bottom: 60px;
-}
-
-.section h2 {
-  margin-bottom: 25px;
-  font-size: 1.6rem;
-}
-
-/* Grid */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
-}
-
-/* Produto */
-.produto {
-  background: #fff;
-  border-radius: 14px;
   padding: 20px;
+}
+
+.grid, .grid-home {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card-link {
+  padding: 40px;
   text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease;
-}
-
-.produto:hover {
-  transform: translateY(-6px);
-}
-
-.produto img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.produto h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-.preco {
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-/* Botões */
-.btn {
-  display: inline-block;
-  padding: 12px;
-  width: 100%;
-  border-radius: 8px;
+  border-radius: 12px;
   color: #fff;
   text-decoration: none;
   font-weight: bold;
 }
 
-.btn.shopee {
-  background-color: #ee4d2d;
-}
+.shopee { background: #ee4d2d; }
+.mercado { background: #ffe600; color: #333; }
+.admin { background: #40739e; }
 
-.btn.mercado-livre {
-  background-color: #ffe600;
-  color: #333;
-}
-
-/* Footer */
-.footer {
+.produto {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
   text-align: center;
-  padding: 30px 15px;
-  font-size: 0.85rem;
-  color: #777;
 }
+
+.btn {
+  display: block;
+  margin-top: 15px;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.btn.shopee { background: #ee4d2d; }
+.btn.mercado { background: #ffe600; color: #333; }
