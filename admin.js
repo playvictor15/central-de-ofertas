@@ -129,6 +129,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const lojaSelect = document.getElementById('loja');
   if (lojaSelect) {
     carregarAdmin();
+
+     const SENHA_ADMIN = '15052007'; // troque quando quiser
+
+function verificarSenha() {
+  const senha = document.getElementById('senhaAdmin').value;
+  const erro = document.getElementById('erro-senha');
+
+  if (senha === SENHA_ADMIN) {
+    localStorage.setItem('adminLogado', 'true');
+    liberarPainel();
+  } else {
+    erro.textContent = 'Senha incorreta.';
+  }
+}
+
+function liberarPainel() {
+  document.getElementById('login-admin').style.display = 'none';
+  document.getElementById('painel-admin').style.display = 'block';
+}
+
+function logoutAdmin() {
+  localStorage.removeItem('adminLogado');
+  location.reload();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('adminLogado') === 'true') {
+    liberarPainel();
+  }
+});
+
     lojaSelect.addEventListener('change', carregarAdmin);
   }
 });
