@@ -12,17 +12,28 @@
   <p>Cadastre links de produtos</p>
 </header>
 
-<main class="container admin">
-  <select id="loja">
-    <option value="shopee">Shopee</option>
-    <option value="mercado">Mercado Livre</option>
-  </select>
+<main class="container admin-container">
 
-  <input type="text" id="nome" placeholder="Nome do produto">
-  <input type="url" id="link" placeholder="Link do produto">
+  <div class="admin-card">
+    <h2>Adicionar produto</h2>
 
-  <button onclick="salvarProduto()">Salvar Produto</button>
+    <label>Loja</label>
+    <select id="loja">
+      <option value="shopee">Shopee</option>
+      <option value="mercado">Mercado Livre</option>
+    </select>
+
+    <label>Nome do produto</label>
+    <input type="text" id="nome" placeholder="Ex: Fone Bluetooth">
+
+    <label>Link do produto</label>
+    <input type="url" id="link" placeholder="Cole o link de afiliado">
+
+    <button onclick="salvarProduto()">Salvar produto</button>
+  </div>
+
 </main>
+
 
 <script src="admin.js"></script>
 </body>
