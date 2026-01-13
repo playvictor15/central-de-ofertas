@@ -1,11 +1,15 @@
-function salvarProduto() {
-  const loja = document.getElementById('loja').value;
-  const nome = document.getElementById('nome').value.trim();
-  const imagem = document.getElementById('imagem').value.trim();
-  const link = document.getElementById('link').value.trim();
+/* ===============================
+   SALVAR PRODUTO
+================================ */
 
-  if (!nome || !link) {
-    alert('Nome e link são obrigatórios.');
+function salvarProduto() {
+  const loja = document.getElementById('loja')?.value;
+  const nome = document.getElementById('nome')?.value.trim();
+  const imagem = document.getElementById('imagem')?.value.trim();
+  const link = document.getElementById('link')?.value.trim();
+
+  if (!nome || !link || !loja) {
+    alert('Preencha todos os campos obrigatórios.');
     return;
   }
 
@@ -21,16 +25,24 @@ function salvarProduto() {
 
   alert('Produto salvo com sucesso.');
 
+  // Limpa formulário
   document.getElementById('nome').value = '';
   document.getElementById('imagem').value = '';
   document.getElementById('link').value = '';
+
+  // Atualiza lista do admin
+  carregarAdmin();
 }
+
+/* ===============================
+   CARREGAR PRODUTOS (PÁGINAS PÚBLICAS)
+================================ */
 
 function carregarProdutos(loja, containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  container.innerHTML = ''; // LIMPA antes de renderizar
+  container.innerHTML = '';
 
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
 
@@ -44,25 +56,85 @@ function carregarProdutos(loja, containerId) {
     card.className = 'produto';
 
     card.innerHTML = `
-  <div class="produto-card">
-    ${
-      produto.imagem
-        ? `<img src="${produto.imagem}" alt="${produto.nome}">`
-        : ''
-    }
-    <h3>${produto.nome}</h3>
-    <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
-      Comprar agora
-    </a>
-  </div>
-`;
-    
+      <div class="produto-card">
+        ${
+          produto.imagem
+            ? `<img src="${produto.imagem}" alt="${produto.nome}">`
+            : ''
+        }
+        <h3>${produto.nome}</h3>
+        <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
+          Comprar agora
+        </a>
+      </div>
+    `;
+
     container.appendChild(card);
   });
 }
 
-/* Executa automaticamente nas páginas certas */
+/* ===============================
+   ÁREA ADMIN — LISTAR PRODUTOS
+================================ */
+
+function carregarAdmin() {
+  const lojaSelect = document.getElementById('loja');
+  const lista = document.getElementById('lista-admin');
+
+  if (!lojaSelect || !lista) return;
+
+  const loja = lojaSelect.value;
+  lista.innerHTML = '';
+
+  const produtos = JSON.parse(localStorage.getItem(loja)) || [];
+
+  if (produtos.length === 0) {
+    lista.innerHTML = '<p style="text-align:center;">Nenhum produto cadastrado.</p>';
+    return;
+  }
+
+  produtos.forEach((produto, index) => {
+    const item = document.createElement('div');
+    item.className = 'admin-item';
+
+    item.innerHTML = `
+      <span title="${produto.nome}">${produto.nome}</span>
+      <button onclick="removerProduto('${loja}', ${index})">
+        Remover
+      </button>
+    `;
+
+    lista.appendChild(item);
+  });
+}
+
+/* ===============================
+   REMOVER PRODUTO
+================================ */
+
+function removerProduto(loja, index) {
+  const produtos = JSON.parse(localStorage.getItem(loja)) || [];
+
+  produtos.splice(index, 1);
+  localStorage.setItem(loja, JSON.stringify(produtos));
+
+  carregarAdmin();
+}
+
+/* ===============================
+   INIT
+================================ */
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Páginas públicas
   carregarProdutos('shopee', 'lista-shopee');
   carregarProdutos('mercado', 'lista-mercado');
+
+  // Admin
+  const lojaSelect = document.getElementById('loja');
+  if (lojaSelect) {
+    carregarAdmin();
+    lojaSelect.addEventListener('change', carregarAdmin);
+  }
 });
+
