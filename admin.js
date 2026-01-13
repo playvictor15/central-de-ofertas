@@ -36,11 +36,14 @@ function carregarProdutos(loja, containerId) {
     card.className = 'produto';
 
     card.innerHTML = `
-      <h3>${produto.nome}</h3>
-      <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
-        Comprar agora
-      </a>
-    `;
+  <div class="produto-card">
+    <h3>${produto.nome}</h3>
+    <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
+      Comprar agora
+    </a>
+  </div>
+`;
+
 
     container.appendChild(card);
   });
