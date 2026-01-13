@@ -9,13 +9,13 @@ const SENHA_ADMIN = '15052007'; // 🔐 troque quando quiser
 ================================ */
 
 function verificarSenha() {
-  const senha = document.getElementById('senhaAdmin').value;
+  const senha = document.getElementById('senhaAdmin')?.value;
   const erro = document.getElementById('erro-senha');
 
   if (senha === SENHA_ADMIN) {
     localStorage.setItem('adminLogado', 'true');
     liberarPainel();
-  } else {
+  } else if (erro) {
     erro.textContent = 'Senha incorreta.';
   }
 }
@@ -49,9 +49,7 @@ function salvarProduto() {
   }
 
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
-
   produtos.push({ nome, imagem, link });
-
   localStorage.setItem(loja, JSON.stringify(produtos));
 
   alert('Produto salvo com sucesso.');
@@ -72,7 +70,6 @@ function carregarProdutos(loja, containerId) {
   if (!container) return;
 
   container.innerHTML = '';
-
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
 
   if (produtos.length === 0) {
@@ -140,4 +137,25 @@ function removerProduto(loja, index) {
    INIT
 ================================ */
 
-d
+document.addEventListener('DOMContentLoaded', () => {
+  /* 🔐 Login */
+  const btnLogin = document.getElementById('btn-login');
+  if (btnLogin) {
+    btnLogin.addEventListener('click', verificarSenha);
+  }
+
+  if (localStorage.getItem('adminLogado') === 'true') {
+    liberarPainel();
+  }
+
+  /* Público */
+  carregarProdutos('shopee', 'lista-shopee');
+  carregarProdutos('mercado', 'lista-mercado');
+
+  /* Admin */
+  const lojaSelect = document.getElementById('loja');
+  if (lojaSelect) {
+    carregarAdmin();
+    lojaSelect.addEventListener('change', carregarAdmin);
+  }
+});
