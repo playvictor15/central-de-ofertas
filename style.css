@@ -6,9 +6,8 @@
 }
 
 body {
-  background-color: #f5f6fa;
+  background-color: #f4f6f8;
   color: #333;
-  line-height: 1.6;
 }
 
 /* Header */
@@ -16,75 +15,89 @@ body {
   background: linear-gradient(135deg, #2f3640, #353b48);
   color: #fff;
   text-align: center;
-  padding: 40px 20px;
+  padding: 45px 20px;
 }
 
 .header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 10px;
+  font-size: 2.3rem;
 }
 
 .header p {
-  font-size: 1rem;
+  margin-top: 10px;
   opacity: 0.9;
 }
 
 /* Container */
 .container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 40px auto;
   padding: 0 20px;
+}
+
+/* Sections */
+.section {
+  margin-bottom: 60px;
+}
+
+.section h2 {
+  margin-bottom: 25px;
+  font-size: 1.6rem;
+}
+
+/* Grid */
+.grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 25px;
 }
 
-/* Cards */
-.card {
+/* Produto */
+.produto {
   background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
 }
 
-.card:hover {
+.produto:hover {
   transform: translateY(-6px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
 }
 
-.card h2 {
+.produto img {
+  width: 100%;
+  border-radius: 10px;
   margin-bottom: 15px;
-  font-size: 1.4rem;
 }
 
-.card p {
-  margin-bottom: 25px;
-  font-size: 0.95rem;
+.produto h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.preco {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
 /* Botões */
 .btn {
   display: inline-block;
-  padding: 12px 20px;
+  padding: 12px;
+  width: 100%;
   border-radius: 8px;
-  text-decoration: none;
   color: #fff;
+  text-decoration: none;
   font-weight: bold;
-  text-align: center;
-  transition: opacity 0.3s ease;
 }
 
-.btn:hover {
-  opacity: 0.85;
-}
-
-/* Cores específicas */
-.shopee .btn {
+.btn.shopee {
   background-color: #ee4d2d;
 }
 
-.mercado-livre .btn {
+.btn.mercado-livre {
   background-color: #ffe600;
   color: #333;
 }
@@ -92,7 +105,7 @@ body {
 /* Footer */
 .footer {
   text-align: center;
-  padding: 25px 15px;
+  padding: 30px 15px;
   font-size: 0.85rem;
   color: #777;
 }
