@@ -51,26 +51,21 @@ function carregarProdutos(loja, containerId) {
     return;
   }
 
-  produtos.forEach(produto => {
-    const card = document.createElement('div');
-    card.className = 'produto';
+ produtos.forEach(produto => {
+  const card = document.createElement('div');
+  card.className = 'produto-card';
 
-    card.innerHTML = `
-      <div class="produto-card">
-        ${
-          produto.imagem
-            ? `<img src="${produto.imagem}" alt="${produto.nome}">`
-            : ''
-        }
-        <h3>${produto.nome}</h3>
-        <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
-          Comprar agora
-        </a>
-      </div>
-    `;
+  card.innerHTML = `
+    ${produto.imagem ? `<img src="${produto.imagem}" alt="${produto.nome}">` : ''}
+    <h3>${produto.nome}</h3>
+    <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
+      Comprar agora
+    </a>
+  `;
 
-    container.appendChild(card);
-  });
+  container.appendChild(card);
+});
+
 }
 
 /* ===============================
