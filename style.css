@@ -188,3 +188,42 @@ body {
   border-radius: 12px;
   margin-bottom: 15px;
 }
+/* ===== LISTA ADMIN ===== */
+
+.admin-subtitle {
+  margin: 30px 0 15px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.admin-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f2f6;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.admin-item span {
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-item button {
+  background: #c23616;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.admin-item button:hover {
+  opacity: 0.85;
+}
