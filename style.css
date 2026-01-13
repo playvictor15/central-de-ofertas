@@ -159,3 +159,23 @@ body {
 .admin-card button:hover {
   opacity: 0.85;
 }
+/* ===== CARDS DE PRODUTO ===== */
+
+.produto-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.produto-card:hover {
+  transform: translateY(-6px);
+}
+
+.produto-card h3 {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  color: #2f3640;
+}
