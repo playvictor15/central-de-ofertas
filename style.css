@@ -179,3 +179,12 @@ body {
   margin-bottom: 20px;
   color: #2f3640;
 }
+/* ===== IMAGEM DO PRODUTO ===== */
+
+.produto-card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
