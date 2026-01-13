@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Administração</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>Área Administrativa</h1>
+  <p>Cadastre links de produtos</p>
+</header>
+
+<main class="container admin">
+  <select id="loja">
+    <option value="shopee">Shopee</option>
+    <option value="mercado">Mercado Livre</option>
+  </select>
+
+  <input type="text" id="nome" placeholder="Nome do produto">
+  <input type="url" id="link" placeholder="Link do produto">
+
+  <button onclick="salvarProduto()">Salvar Produto</button>
+</main>
+
+<script src="admin.js"></script>
+</body>
+</html>
