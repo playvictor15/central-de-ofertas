@@ -322,3 +322,32 @@ body {
   color: red;
   margin-top: 10px;
 }
+
+.produto-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  transition: transform .2s ease;
+}
+
+.produto-card:hover {
+  transform: translateY(-6px);
+}
+
+.produto-card img {
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+.btn {
+  display: block;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.btn.shopee { background:#ee4d2d; color:#fff; }
+.btn.mercado { background:#ffe600; color:#000; }
