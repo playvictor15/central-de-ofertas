@@ -2,7 +2,8 @@
    CONFIGURAÇÃO
 ================================ */
 
-const SENHA_ADMIN = '15052007'; // 🔐 troque quando quiser
+const SENHA_ADMIN = '15052007';
+let produtoEmEdicao = null;
 
 /* ===============================
    LOGIN ADMIN
@@ -21,11 +22,8 @@ function verificarSenha() {
 }
 
 function liberarPainel() {
-  const login = document.getElementById('login-admin');
-  const painel = document.getElementById('painel-admin');
-
-  if (login) login.style.display = 'none';
-  if (painel) painel.style.display = 'block';
+  document.getElementById('login-admin').style.display = 'none';
+  document.getElementById('painel-admin').style.display = 'block';
 }
 
 function logoutAdmin() {
@@ -34,76 +32,70 @@ function logoutAdmin() {
 }
 
 /* ===============================
-   SALVAR PRODUTO
+   SALVAR / ATUALIZAR PRODUTO
 ================================ */
 
-function salvarProduto() {
-  const loja = document.getElementById('loja')?.value;
-  const nome = document.getElementById('nome')?.value.trim();
-  const imagem = document.getElementById('imagem')?.value.trim();
-  const link = document.getElementById('link')?.value.trim();
+function salvarOuAtualizarProduto() {
+  const loja = document.getElementById('loja').value;
+  const nome = document.getElementById('nome').value.trim();
+  const imagem = document.getElementById('imagem').value.trim();
+  const link = document.getElementById('link').value.trim();
 
-  if (!nome || !link || !loja) {
-    alert('Preencha todos os campos obrigatórios.');
+  if (!nome || !link) {
+    alert('Preencha nome e link.');
     return;
   }
 
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
-  produtos.push({ nome, imagem, link });
+
+  if (produtoEmEdicao) {
+    produtos[produtoEmEdicao.index] = { nome, imagem, link };
+    produtoEmEdicao = null;
+    document.getElementById('btn-salvar-produto').textContent = 'Salvar produto';
+  } else {
+    produtos.push({ nome, imagem, link });
+  }
+
   localStorage.setItem(loja, JSON.stringify(produtos));
-
-  alert('Produto salvo com sucesso.');
-
-  document.getElementById('nome').value = '';
-  document.getElementById('imagem').value = '';
-  document.getElementById('link').value = '';
-
+  limparFormulario();
   carregarAdmin();
 }
 
 /* ===============================
-   CARREGAR PRODUTOS (PÚBLICO)
+   EDITAR PRODUTO
 ================================ */
 
-function carregarProdutos(loja, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  container.innerHTML = '';
+function editarProduto(loja, index) {
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
+  const produto = produtos[index];
 
-  if (produtos.length === 0) {
-    container.innerHTML = '<p>Nenhuma oferta cadastrada ainda.</p>';
-    return;
-  }
+  document.getElementById('loja').value = loja;
+  document.getElementById('nome').value = produto.nome;
+  document.getElementById('imagem').value = produto.imagem || '';
+  document.getElementById('link').value = produto.link;
 
-  produtos.forEach(produto => {
-    const card = document.createElement('div');
-    card.className = 'produto-card';
-
-    card.innerHTML = `
-      ${produto.imagem ? `<img src="${produto.imagem}" alt="${produto.nome}">` : ''}
-      <h3>${produto.nome}</h3>
-      <a href="${produto.link}" target="_blank" rel="noopener" class="btn ${loja}">
-        Comprar agora
-      </a>
-    `;
-
-    container.appendChild(card);
-  });
+  produtoEmEdicao = { loja, index };
+  document.getElementById('btn-salvar-produto').textContent = 'Atualizar produto';
 }
 
 /* ===============================
-   ADMIN — LISTAR / REMOVER
+   REMOVER PRODUTO
+================================ */
+
+function removerProduto(loja, index) {
+  const produtos = JSON.parse(localStorage.getItem(loja)) || [];
+  produtos.splice(index, 1);
+  localStorage.setItem(loja, JSON.stringify(produtos));
+  carregarAdmin();
+}
+
+/* ===============================
+   LISTAR PRODUTOS (ADMIN)
 ================================ */
 
 function carregarAdmin() {
-  const lojaSelect = document.getElementById('loja');
+  const loja = document.getElementById('loja').value;
   const lista = document.getElementById('lista-admin');
-
-  if (!lojaSelect || !lista) return;
-
-  const loja = lojaSelect.value;
   lista.innerHTML = '';
 
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
@@ -114,23 +106,29 @@ function carregarAdmin() {
   }
 
   produtos.forEach((produto, index) => {
-    const item = document.createElement('div');
-    item.className = 'admin-item';
+    const div = document.createElement('div');
+    div.className = 'admin-item';
 
-    item.innerHTML = `
-      <span title="${produto.nome}">${produto.nome}</span>
-      <button onclick="removerProduto('${loja}', ${index})">Remover</button>
+    div.innerHTML = `
+      <span>${produto.nome}</span>
+      <div>
+        <button onclick="editarProduto('${loja}', ${index})">Editar</button>
+        <button onclick="removerProduto('${loja}', ${index})">Remover</button>
+      </div>
     `;
 
-    lista.appendChild(item);
+    lista.appendChild(div);
   });
 }
 
-function removerProduto(loja, index) {
-  const produtos = JSON.parse(localStorage.getItem(loja)) || [];
-  produtos.splice(index, 1);
-  localStorage.setItem(loja, JSON.stringify(produtos));
-  carregarAdmin();
+/* ===============================
+   UTIL
+================================ */
+
+function limparFormulario() {
+  document.getElementById('nome').value = '';
+  document.getElementById('imagem').value = '';
+  document.getElementById('link').value = '';
 }
 
 /* ===============================
@@ -138,24 +136,13 @@ function removerProduto(loja, index) {
 ================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  /* 🔐 Login */
-  const btnLogin = document.getElementById('btn-login');
-  if (btnLogin) {
-    btnLogin.addEventListener('click', verificarSenha);
-  }
-
   if (localStorage.getItem('adminLogado') === 'true') {
     liberarPainel();
   }
 
-  /* Público */
-  carregarProdutos('shopee', 'lista-shopee');
-  carregarProdutos('mercado', 'lista-mercado');
+  document.getElementById('btn-login')?.addEventListener('click', verificarSenha);
+  document.getElementById('btn-salvar-produto')?.addEventListener('click', salvarOuAtualizarProduto);
+  document.getElementById('loja')?.addEventListener('change', carregarAdmin);
 
-  /* Admin */
-  const lojaSelect = document.getElementById('loja');
-  if (lojaSelect) {
-    carregarAdmin();
-    lojaSelect.addEventListener('change', carregarAdmin);
-  }
+  carregarAdmin();
 });
