@@ -22,8 +22,13 @@ function verificarSenha() {
 }
 
 function liberarPainel() {
-  document.getElementById('login-admin').style.display = 'none';
-  document.getElementById('painel-admin').style.display = 'block';
+  const login = document.getElementById('login-admin');
+  const painel = document.getElementById('painel-admin');
+
+  if (!login || !painel) return; // 👈 evita erro fora do admin
+
+  login.style.display = 'none';
+  painel.style.display = 'block';
 }
 
 function logoutAdmin() {
@@ -136,13 +141,39 @@ function limparFormulario() {
 ================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('adminLogado') === 'true') {
-    liberarPainel();
+
+  /* ===============================
+     🔐 SOMENTE NO ADMIN
+  ================================ */
+
+  const existeLoginAdmin = document.getElementById('login-admin');
+  const existePainelAdmin = document.getElementById('painel-admin');
+
+  if (existeLoginAdmin && existePainelAdmin) {
+
+    if (localStorage.getItem('adminLogado') === 'true') {
+      liberarPainel();
+    }
+
+    document
+      .getElementById('btn-login')
+      ?.addEventListener('click', verificarSenha);
+
+    document
+      .getElementById('btn-salvar-produto')
+      ?.addEventListener('click', salvarOuAtualizarProduto);
+
+    document
+      .getElementById('loja')
+      ?.addEventListener('change', carregarAdmin);
+
+    carregarAdmin();
   }
 
-  document.getElementById('btn-login')?.addEventListener('click', verificarSenha);
-  document.getElementById('btn-salvar-produto')?.addEventListener('click', salvarOuAtualizarProduto);
-  document.getElementById('loja')?.addEventListener('change', carregarAdmin);
+  /* ===============================
+     🌐 PÁGINAS PÚBLICAS
+  ================================ */
 
-  carregarAdmin();
+  carregarProdutos('shopee', 'lista-shopee');
+  carregarProdutos('mercado', 'lista-mercado');
 });
