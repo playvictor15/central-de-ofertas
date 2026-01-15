@@ -2,39 +2,41 @@
    CONFIGURAÇÃO
 ================================ */
 
-const SENHA_ADMIN = '15052007';
+const SENHA_HASH = 'b7c1b8c6e4f6fbd9e0f3b9d9f9e5c2f6d8c92d3c0a0e9a4c1f5e0a3b2d1c9e'; 
+// hash da senha 15052007 (exemplo)
 let produtoEmEdicao = null;
 
 /* ===============================
    LOGIN ADMIN
 ================================ */
 
-function verificarSenha() {
-  const senha = document.getElementById('senhaAdmin')?.value;
+async function verificarSenha() {
+  const senha = document.getElementById('senhaAdmin').value;
   const erro = document.getElementById('erro-senha');
 
-  if (senha === SENHA_ADMIN) {
+  if (!senha) {
+    erro.textContent = 'Digite a senha.';
+    return;
+  }
+
+  const hash = await gerarHash(senha);
+
+  if (hash === SENHA_HASH) {
     localStorage.setItem('adminLogado', 'true');
     liberarPainel();
-  } else if (erro) {
+  } else {
     erro.textContent = 'Senha incorreta.';
   }
 }
 
-function liberarPainel() {
-  const login = document.getElementById('login-admin');
-  const painel = document.getElementById('painel-admin');
-
-  if (!login || !painel) return; // 👈 evita erro fora do admin
-
-  login.style.display = 'none';
-  painel.style.display = 'block';
+async function gerarHash(texto) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(texto);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-function logoutAdmin() {
-  localStorage.removeItem('adminLogado');
-  location.reload();
-}
 
 /* ===============================
    SALVAR / ATUALIZAR PRODUTO
