@@ -1,35 +1,45 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <title>Administração</title>
+
+  <meta name="description" content="Área administrativa para cadastro de produtos afiliados">
+  <meta name="author" content="Victor">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="header">
   <h1>Área Administrativa</h1>
-  <p>Cadastre links de produtos</p>
+  <p>Acesso restrito</p>
 </header>
 
 <main class="container admin-container">
 
-  <!-- LOGIN ADMIN -->
-  <div id="login-admin" class="admin-login">
-    <h2>Acesso restrito</h2>
-    <input type="password" id="senhaAdmin" placeholder="Digite a senha">
-    <button id="btn-salvar-produto">Salvar produto</button>
-    <p id="erro-senha"></p>
+  <!-- 🔐 LOGIN -->
+  <div id="login-admin" class="admin-card">
+    <h2>Login do administrador</h2>
+
+    <input
+      type="password"
+      id="senhaAdmin"
+      placeholder="Digite a senha">
+
+    <p id="erro-senha" class="erro"></p>
+
+    <button id="btn-login">Entrar</button>
   </div>
 
-  <!-- PAINEL ADMIN -->
-  <div id="painel-admin" style="display: none;">
+  <!-- 🔒 PAINEL (COMEÇA ESCONDIDO) -->
+  <div id="painel-admin" style="display:none">
 
     <div class="admin-card">
       <h2>Adicionar produto</h2>
 
       <label>Loja</label>
-      <select id="loja">
+      <select id="loja" onchange="carregarAdmin()">
         <option value="shopee">Shopee</option>
         <option value="mercado">Mercado Livre</option>
       </select>
@@ -38,16 +48,10 @@
       <input type="text" id="nome" placeholder="Ex: Fone Bluetooth">
 
       <label>Imagem do produto (URL)</label>
-      <input
-        type="url"
-        id="imagem"
-        placeholder="Cole o link da imagem do produto">
+      <input type="url" id="imagem" placeholder="Link da imagem">
 
       <label>Link do produto</label>
-      <input
-        type="url"
-        id="link"
-        placeholder="Cole o link de afiliado">
+      <input type="url" id="link" placeholder="Link de afiliado">
 
       <button onclick="salvarProduto()">Salvar produto</button>
       <button onclick="logoutAdmin()" class="btn-sair">Sair</button>
