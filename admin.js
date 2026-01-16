@@ -2,8 +2,7 @@
    CONFIGURAÇÃO
 ================================ */
 
-const SENHA_HASH = 'b7c1b8c6e4f6fbd9e0f3b9d9f9e5c2f6d8c92d3c0a0e9a4c1f5e0a3b2d1c9e'; 
-// hash da senha 15052007 (exemplo)
+const SENHA_HASH = '15052007'; 
 let produtoEmEdicao = null;
 
 /* ===============================
@@ -37,6 +36,17 @@ async function gerarHash(texto) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+/* ===============================
+   LIBERAR / BLOQUEAR PAINEL
+================================ */
+
+function liberarPainel() {
+  const login = document.getElementById('login-admin');
+  const painel = document.getElementById('painel-admin');
+
+  if (login) login.style.display = 'none';
+  if (painel) painel.style.display = 'block';
+}
 
 /* ===============================
    SALVAR / ATUALIZAR PRODUTO
