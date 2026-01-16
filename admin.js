@@ -2,19 +2,36 @@
    CONFIGURAÇÃO
 ================================ */
 
-const SENHA_HASH = '15052007'; 
+const SENHA_HASH = '15052007'; // depois você pode colocar o hash real
 let produtoEmEdicao = null;
 
 /* ===============================
-   LOGIN ADMIN
+   FUNÇÕES GLOBAIS (EXPLICITAS)
 ================================ */
 
-async function verificarSenha() {
-  const senha = document.getElementById('senhaAdmin').value;
+// ⚠️ TORNA GLOBAL DE VERDADE
+window.liberarPainel = function () {
+  const login = document.getElementById('login-admin');
+  const painel = document.getElementById('painel-admin');
+
+  if (login) login.style.display = 'none';
+  if (painel) painel.style.display = 'block';
+};
+
+window.gerarHash = async function (texto) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(texto);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+};
+
+window.verificarSenha = async function () {
+  const senha = document.getElementById('senhaAdmin')?.value;
   const erro = document.getElementById('erro-senha');
 
   if (!senha) {
-    erro.textContent = 'Digite a senha.';
+    if (erro) erro.textContent = 'Digite a senha.';
     return;
   }
 
@@ -24,35 +41,15 @@ async function verificarSenha() {
     localStorage.setItem('adminLogado', 'true');
     liberarPainel();
   } else {
-    erro.textContent = 'Senha incorreta.';
+    if (erro) erro.textContent = 'Senha incorreta.';
   }
-}
-
-async function gerarHash(texto) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(texto);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-/* ===============================
-   LIBERAR / BLOQUEAR PAINEL
-================================ */
-
-function liberarPainel() {
-  const login = document.getElementById('login-admin');
-  const painel = document.getElementById('painel-admin');
-
-  if (login) login.style.display = 'none';
-  if (painel) painel.style.display = 'block';
-}
+};
 
 /* ===============================
    SALVAR / ATUALIZAR PRODUTO
 ================================ */
 
-function salvarOuAtualizarProduto() {
+window.salvarOuAtualizarProduto = function () {
   const loja = document.getElementById('loja').value;
   const nome = document.getElementById('nome').value.trim();
   const imagem = document.getElementById('imagem').value.trim();
@@ -76,13 +73,13 @@ function salvarOuAtualizarProduto() {
   localStorage.setItem(loja, JSON.stringify(produtos));
   limparFormulario();
   carregarAdmin();
-}
+};
 
 /* ===============================
-   EDITAR PRODUTO
+   EDITAR / REMOVER
 ================================ */
 
-function editarProduto(loja, index) {
+window.editarProduto = function (loja, index) {
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
   const produto = produtos[index];
 
@@ -93,26 +90,26 @@ function editarProduto(loja, index) {
 
   produtoEmEdicao = { loja, index };
   document.getElementById('btn-salvar-produto').textContent = 'Atualizar produto';
-}
+};
 
-/* ===============================
-   REMOVER PRODUTO
-================================ */
-
-function removerProduto(loja, index) {
+window.removerProduto = function (loja, index) {
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
   produtos.splice(index, 1);
   localStorage.setItem(loja, JSON.stringify(produtos));
   carregarAdmin();
-}
+};
 
 /* ===============================
-   LISTAR PRODUTOS (ADMIN)
+   LISTAR ADMIN
 ================================ */
 
-function carregarAdmin() {
-  const loja = document.getElementById('loja').value;
+window.carregarAdmin = function () {
+  const lojaSelect = document.getElementById('loja');
   const lista = document.getElementById('lista-admin');
+
+  if (!lojaSelect || !lista) return;
+
+  const loja = lojaSelect.value;
   lista.innerHTML = '';
 
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
@@ -136,7 +133,7 @@ function carregarAdmin() {
 
     lista.appendChild(div);
   });
-}
+};
 
 /* ===============================
    UTIL
@@ -153,39 +150,23 @@ function limparFormulario() {
 ================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  const login = document.getElementById('login-admin');
+  const painel = document.getElementById('painel-admin');
 
-  /* ===============================
-     🔐 SOMENTE NO ADMIN
-  ================================ */
-
-  const existeLoginAdmin = document.getElementById('login-admin');
-  const existePainelAdmin = document.getElementById('painel-admin');
-
-  if (existeLoginAdmin && existePainelAdmin) {
-
+  if (login && painel) {
     if (localStorage.getItem('adminLogado') === 'true') {
       liberarPainel();
     }
 
-    document
-      .getElementById('btn-login')
+    document.getElementById('btn-login')
       ?.addEventListener('click', verificarSenha);
 
-    document
-      .getElementById('btn-salvar-produto')
+    document.getElementById('btn-salvar-produto')
       ?.addEventListener('click', salvarOuAtualizarProduto);
 
-    document
-      .getElementById('loja')
+    document.getElementById('loja')
       ?.addEventListener('change', carregarAdmin);
 
     carregarAdmin();
   }
-
-  /* ===============================
-     🌐 PÁGINAS PÚBLICAS
-  ================================ */
-
-  carregarProdutos('shopee', 'lista-shopee');
-  carregarProdutos('mercado', 'lista-mercado');
 });
