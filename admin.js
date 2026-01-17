@@ -153,20 +153,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const login = document.getElementById('login-admin');
   const painel = document.getElementById('painel-admin');
 
-  if (login && painel) {
-    if (localStorage.getItem('adminLogado') === 'true') {
-      liberarPainel();
-    }
+  // 🔒 ESTADO INICIAL SEGURO
+  if (login) login.style.display = 'block';
+  if (painel) painel.style.display = 'none';
 
-    document.getElementById('btn-login')
-      ?.addEventListener('click', verificarSenha);
-
-    document.getElementById('btn-salvar-produto')
-      ?.addEventListener('click', salvarOuAtualizarProduto);
-
-    document.getElementById('loja')
-      ?.addEventListener('change', carregarAdmin);
-
-    carregarAdmin();
+  // 🔓 Libera SOMENTE se já estiver autenticado
+  if (localStorage.getItem('adminLogado') === 'true') {
+    liberarPainel();
   }
+
+  document.getElementById('btn-login')
+    ?.addEventListener('click', verificarSenha);
+
+  document.getElementById('btn-salvar-produto')
+    ?.addEventListener('click', salvarOuAtualizarProduto);
+
+  document.getElementById('loja')
+    ?.addEventListener('change', carregarAdmin);
+
+  carregarAdmin();
 });
+
