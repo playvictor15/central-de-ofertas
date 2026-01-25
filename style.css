@@ -380,3 +380,17 @@ img {
     width: 100%;
   }
 }
+.admin-tools {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.importar-btn {
+  background: #444;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
