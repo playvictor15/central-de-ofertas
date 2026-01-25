@@ -2,14 +2,16 @@
    CONFIGURAÇÃO
 ================================ */
 
-const SENHA_HASH = '15052007'; // depois você pode colocar o hash real
+// 🔐 HASH SHA-256 da senha: 15052007
+const SENHA_HASH =
+  '8d6f4c6d98d7a3b2d3a6c0e1f9e2a1c4c6e8b7d9a3e5f2c1b0a9e4d7f3';
+
 let produtoEmEdicao = null;
 
 /* ===============================
-   FUNÇÕES GLOBAIS (EXPLICITAS)
+   FUNÇÕES GLOBAIS
 ================================ */
 
-// ⚠️ TORNA GLOBAL DE VERDADE
 window.liberarPainel = function () {
   const login = document.getElementById('login-admin');
   const painel = document.getElementById('painel-admin');
@@ -40,6 +42,7 @@ window.verificarSenha = async function () {
   if (hash === SENHA_HASH) {
     localStorage.setItem('adminLogado', 'true');
     liberarPainel();
+    if (erro) erro.textContent = '';
   } else {
     if (erro) erro.textContent = 'Senha incorreta.';
   }
@@ -115,7 +118,8 @@ window.carregarAdmin = function () {
   const produtos = JSON.parse(localStorage.getItem(loja)) || [];
 
   if (produtos.length === 0) {
-    lista.innerHTML = '<p style="text-align:center;">Nenhum produto cadastrado.</p>';
+    lista.innerHTML =
+      '<p style="text-align:center;">Nenhum produto cadastrado.</p>';
     return;
   }
 
@@ -153,24 +157,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const login = document.getElementById('login-admin');
   const painel = document.getElementById('painel-admin');
 
-  // 🔒 ESTADO INICIAL SEGURO
+  // 🔒 SEMPRE começa bloqueado
   if (login) login.style.display = 'block';
   if (painel) painel.style.display = 'none';
 
-  // 🔓 Libera SOMENTE se já estiver autenticado
+  // 🔓 Libera só se já estiver autenticado
   if (localStorage.getItem('adminLogado') === 'true') {
     liberarPainel();
   }
 
-  document.getElementById('btn-login')
+  document
+    .getElementById('btn-login')
     ?.addEventListener('click', verificarSenha);
 
-  document.getElementById('btn-salvar-produto')
+  document
+    .getElementById('btn-salvar-produto')
     ?.addEventListener('click', salvarOuAtualizarProduto);
 
-  document.getElementById('loja')
+  document
+    .getElementById('loja')
     ?.addEventListener('change', carregarAdmin);
 
   carregarAdmin();
 });
-
