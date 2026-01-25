@@ -57,6 +57,14 @@
       <button onclick="salvarProduto()">Salvar produto</button>
       <button onclick="logoutAdmin()" class="btn-sair">Sair</button>
     </div>
+   <div class="admin-tools">
+  <button onclick="exportarProdutos()">📤 Exportar produtos</button>
+
+  <label class="importar-btn">
+    📥 Importar produtos
+    <input type="file" id="importarArquivo" accept=".json" hidden>
+  </label>
+</div>
 
     <hr>
 
