@@ -27,7 +27,8 @@ window.gerarHash = async function (texto) {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
-window.verificarSenha = function () {
+
+window.verificarSenha = async function () {
   const senha = document.getElementById('senhaAdmin')?.value;
   const erro = document.getElementById('erro-senha');
 
@@ -36,9 +37,10 @@ window.verificarSenha = function () {
     return;
   }
 
-  // 🔐 senha real
-  if (senha === '15052007') {
-    sessionStorage.setItem('adminLogado', 'true');
+  const hash = await gerarHash(senha);
+
+  if (hash === SENHA_HASH) {
+    localStorage.setItem('adminLogado', 'true');
     liberarPainel();
     if (erro) erro.textContent = '';
   } else {
@@ -46,9 +48,59 @@ window.verificarSenha = function () {
   }
 };
 
+/* ===============================
+   EXPORTAR / IMPORTAR
+================================ */
+
+window.exportarProdutos = function () {
+  const dados = {
+    shopee: JSON.parse(localStorage.getItem('shopee')) || [],
+    mercado: JSON.parse(localStorage.getItem('mercado')) || []
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(dados, null, 2)],
+    { type: 'application/json' }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'produtos-backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+document
+  .getElementById('importarArquivo')
+  ?.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const dados = JSON.parse(reader.result);
+
+        if (dados.shopee) {
+          localStorage.setItem('shopee', JSON.stringify(dados.shopee));
+        }
+        if (dados.mercado) {
+          localStorage.setItem('mercado', JSON.stringify(dados.mercado));
+        }
+
+        alert('Produtos importados com sucesso!');
+        carregarAdmin();
+      } catch {
+        alert('Arquivo inválido.');
+      }
+    };
+
+    reader.readAsText(file);
+  });
 
 /* ===============================
-   SALVAR / ATUALIZAR PRODUTO
+   SALVAR / ATUALIZAR
 ================================ */
 
 window.salvarOuAtualizarProduto = function () {
@@ -156,14 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const login = document.getElementById('login-admin');
   const painel = document.getElementById('painel-admin');
 
-  // 🔒 SEMPRE começa bloqueado
+  // 🔒 estado inicial seguro
   if (login) login.style.display = 'block';
   if (painel) painel.style.display = 'none';
 
-  // 🔓 Libera só se já estiver autenticado
-  if (sessionStorage.getItem('adminLogado') === 'true') {
-  liberarPainel();
-}
+  if (localStorage.getItem('adminLogado') === 'true') {
+    liberarPainel();
+  }
 
   document
     .getElementById('btn-login')
