@@ -27,8 +27,7 @@ window.gerarHash = async function (texto) {
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 };
-
-window.verificarSenha = async function () {
+window.verificarSenha = function () {
   const senha = document.getElementById('senhaAdmin')?.value;
   const erro = document.getElementById('erro-senha');
 
@@ -37,16 +36,16 @@ window.verificarSenha = async function () {
     return;
   }
 
-  const hash = await gerarHash(senha);
-
-  if (hash === SENHA_HASH) {
-    localStorage.setItem('adminLogado', 'true');
+  // 🔐 senha real
+  if (senha === '15052007') {
+    sessionStorage.setItem('adminLogado', 'true');
     liberarPainel();
     if (erro) erro.textContent = '';
   } else {
     if (erro) erro.textContent = 'Senha incorreta.';
   }
 };
+
 
 /* ===============================
    SALVAR / ATUALIZAR PRODUTO
@@ -162,9 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (painel) painel.style.display = 'none';
 
   // 🔓 Libera só se já estiver autenticado
-  if (localStorage.getItem('adminLogado') === 'true') {
-    liberarPainel();
-  }
+  if (sessionStorage.getItem('adminLogado') === 'true') {
+  liberarPainel();
+}
 
   document
     .getElementById('btn-login')
